@@ -1,5 +1,5 @@
 '''
-@version: 2018-09-30
+@version: 2018-10-06
 
 @author: Bodo Hugo Barwich
 '''
@@ -8,7 +8,8 @@
 
 class LogMessage(object):
   '''
-  classdocs
+  This is a Class to manage accumulative Log and Error Strings and the numeric Error Code
+  and return them as single String
   '''
    
   '''
@@ -93,6 +94,17 @@ class LogMessage(object):
     if message != '' :
       self._arr_err.append(message)
 
+
+  def __setattr__(self, name, value):
+    if name == 'report' :
+      self.setLog(value)
+    elif name == 'error' :
+      self.setError(value)
+    elif name == 'code' :
+      self._error_code = value
+    else :
+      raise AttributeError('Attribute {} : Attribute does not exist'.format(name))
+      
       
   def clear(self):
     self._arr_log = []
@@ -111,6 +123,14 @@ class LogMessage(object):
   Consultation Methods
   '''
   
+  
+  def getReportArray(self):
+    return self._arr_log
+  
+  
+  def getErrorArray(self):
+    return self._arr_err
+    
       
   def getReportString(self):
     if self._report == '' :
@@ -129,3 +149,13 @@ class LogMessage(object):
   def getErrorCode(self):
     return self._error_code
   
+  
+  def __getattribute__(self, name):
+    if name == 'report' :
+      return self.getReportString()
+    elif name == 'error' :
+      return self.getErrorString()
+    elif name == 'code' :
+      return self.getErrorCode()
+    else :
+      raise AttributeError('Attribute {} : Attribute does not exist'.format(name))
