@@ -18,26 +18,34 @@ class LogMessage(object):
   '''
   
       
-  _arr_log = []
-  _arr_err = []
-  
-  _report = ''
-  _error_message = ''
-  
-  _error_code = 0
-
-
   def __init__(self, logmessage = '', errormessage = '', errorcode = 0):
     '''
-    Constructor
-    '''    
+    A LogMessage Object can be instanciated providing and initial message
+    
+    Parameters
+    ----------
+    logmessage : string
+      A string Message that will be stored as 'log' string Attribute
+    errormessage : string
+      A string Message that will be stored as 'error' string Attribute
+    errorcode : integer
+      A whole Number that will be stored single 'code' numeric Attribute
+    '''
+    
+    self._arr_rpt = []
+    self._arr_err = []
+    
+    self._report = ''
+    self._error_message = ''
+    
+    self._error_code = 0
     
     if logmessage != '' :
-      self.addLog(logmessage)
+      self.setReport(logmessage)
       
     if errormessage != '' :
-      self.addError(errormessage, errorcode)
-    else :
+      self.setError(errormessage, errorcode)
+    elif errorcode != 0 :
       self._error_code = errorcode
       
   
@@ -53,13 +61,13 @@ class LogMessage(object):
   '''
   
       
-  def addLog(self, message):
+  def addReport(self, message):
     '''
     Adds a Message to the Report String
     '''
     
     if message != '' :
-      self._arr_log.append(message)
+      self._arr_rpt.append(message)
       self._report = ''
   
     
@@ -76,38 +84,32 @@ class LogMessage(object):
       self._error_code = code
       
       
-  def setLog(self, message = ''):
-    self._arr_log = []
+  def setReport(self, message = ''):
+    self._arr_rpt = []
     self._report = ''
     
     if message != '' :
-      self._arr_err.append(message)
+      self._arr_rpt.append(message)
     
     
-  def setError(self, message = '', code = 0):
+  def setError(self, message = '', code = None):
     self._arr_err = []
     
     self._error_message = ''
     
-    self._error_code = code
+    if code is None :
+      self._error_code = code
     
     if message != '' :
       self._arr_err.append(message)
-
-
-  def __setattr__(self, name, value):
-    if name == 'report' :
-      self.setLog(value)
-    elif name == 'error' :
-      self.setError(value)
-    elif name == 'code' :
-      self._error_code = value
-    else :
-      raise AttributeError('Attribute {} : Attribute does not exist'.format(name))
       
+      
+  def setErrorCode(self, code = 0):
+    self._error_code = code
+    
       
   def clear(self):
-    self._arr_log = []
+    self._arr_rpt = []
     self._arr_err = []
     
     self._report = ''
@@ -122,10 +124,10 @@ class LogMessage(object):
   -----------------------------------------------------------------------------------------
   Consultation Methods
   '''
-  
+
   
   def getReportArray(self):
-    return self._arr_log
+    return self._arr_rpt
   
   
   def getErrorArray(self):
@@ -134,7 +136,7 @@ class LogMessage(object):
       
   def getReportString(self):
     if self._report == '' :
-      self._report = '\n'.join(self._arr_log)
+      self._report = '\n'.join(self._arr_rpt)
     
     return self._report
   
@@ -150,12 +152,6 @@ class LogMessage(object):
     return self._error_code
   
   
-  def __getattribute__(self, name):
-    if name == 'report' :
-      return self.getReportString()
-    elif name == 'error' :
-      return self.getErrorString()
-    elif name == 'code' :
-      return self.getErrorCode()
-    else :
-      raise AttributeError('Attribute {} : Attribute does not exist'.format(name))
+  report = property(getReportString, setReport)
+  error = property(getErrorString, setError)
+  code = property(getErrorCode, setErrorCode)
