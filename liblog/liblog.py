@@ -97,7 +97,7 @@ class LogMessage(object):
     
     self._error_message = ''
     
-    if code is None :
+    if code is not None :
       self._error_code = code
     
     if message != '' :

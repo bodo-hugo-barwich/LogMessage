@@ -27,8 +27,8 @@ class TestLogMessage(unittest.TestCase):
     pass
 
 
-  def testConstructor(self):
-    print("testConstructor - go ...\n")
+  def test_Constructor(self):
+    print("{} - go ...\n".format(sys._getframe().f_code.co_name))
     
     logmsg = LogMessage()    
     
@@ -44,8 +44,8 @@ class TestLogMessage(unittest.TestCase):
     , 0, "Code is not '0'.\n")
   
   
-  def testAddReport(self):
-    print("testAddReport - go ...\n")
+  def test_AddReport(self):
+    print("{} - go ...\n".format(sys._getframe().f_code.co_name))
     
     logmsg = LogMessage(self._arr_test_log[0])
     
@@ -66,8 +66,21 @@ class TestLogMessage(unittest.TestCase):
     print("testAddReport - Report: '{}'".format(logmsg.getReportString()))
 
 
-  def testAddError(self):
-    print("testAddError - go ...\n")
+  def test_SetReport(self):
+    print("{} - go ...\n".format(sys._getframe().f_code.co_name))
+    
+    logmsg = LogMessage(self._arr_test_log[0])
+    
+    logmsg.setReport(self._arr_test_log[1])
+    
+    print("testAddReport - Report: '{}'".format(logmsg.getReportString()))
+    
+    self.assertEqual(logmsg.getReportString()\
+    , self._arr_test_log[1], "Set Report Message does not match.\n")
+
+
+  def test_AddError(self):
+    print("{} - go ...\n".format(sys._getframe().f_code.co_name))
 
     logmsg = LogMessage("", self._arr_test_error[0])
     
@@ -83,6 +96,45 @@ class TestLogMessage(unittest.TestCase):
     
     self.assertEqual(logmsg.getErrorCode()\
     , self._arr_test_codes[1], "Error Code does not match.\n")
+
+
+  def test_SetError(self):
+    print("{} - go ...\n".format(sys._getframe().f_code.co_name))
+
+    logmsg = LogMessage("", self._arr_test_error[0])
+    
+    logmsg.setError(self._arr_test_error[1], self._arr_test_codes[1])
+
+    self.assertEqual(logmsg.getErrorString()\
+    , self._arr_test_error[1], "Multi Line Error Message uncomplete.\n")
+    
+    self.assertEqual(logmsg.getErrorCode()\
+    , self._arr_test_codes[1], "Error Code does not match.\n")
+
+
+  def test_Clear(self):
+    print("{} - go ...\n".format(sys._getframe().f_code.co_name))
+    
+    logmsg = LogMessage(self._arr_test_log[0])
+    
+    logmsg.addReport(self._arr_test_log[1])
+
+    print("test_Clear - Report 1: '{}'".format(logmsg.getReportString()))
+    
+    logmsg.clear()
+    
+    self.assertEqual(logmsg.getReportString()\
+    , "", "Report not cleared.\n")
+        
+    print("test_Clear - Report 2: '{}'".format(logmsg.getReportString()))
+    
+    logmsg.addReport(self._arr_test_log[2])
+
+    print("test_Clear - Report 3: '{}'".format(logmsg.getReportString()))
+    
+    self.assertEqual(logmsg.getReportString()\
+    , self._arr_test_log[2], "Report not correctly cleared.\n")
+
     
 
 
@@ -90,10 +142,6 @@ if __name__ == "__main__":
   print("tests starting ...\n")
   #import sys;sys.argv = ['', 'Test.testConstructor']
   unittest.main()
-  
-  test = TestLogMessage()
-  
-  test.testAddReport()
   
   print("tests done.\n")
   
