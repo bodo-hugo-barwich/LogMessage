@@ -1,7 +1,7 @@
 '''
 Tests to verify the LogMessage Class Functionality
 
-@version: 2018-10-08
+@version: 2018-10-11
 
 @author: Bodo Hugo Barwich
 '''
