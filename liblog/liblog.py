@@ -9,19 +9,26 @@ from mock.mock import self
 
 class LogMessage(object):
   '''
-  This is a Class to manage accumulative Log and Error Strings and the numeric Error Code
+  This is a Class to manage accumulative Log and Error strings and the numeric Error Code
   and return them as single String
+  It offers Methods to progressively add Messages to the Log or Error Registry
+  The Error Code is accumulative since it keeps only the Highest Value.
+  It publishes the complete merged Message as Properties
+  :func:`LogMessage.report`
+  :func:`LogMessage.error`
+  :func:`LogMessage.code`
   '''
    
   '''
   -----------------------------------------------------------------------------------------
-  Attributes
+  Constructors
   '''
   
       
   def __init__(self, logmessage = '', errormessage = '', errorcode = 0):
     '''
-    A LogMessage Object can be instanciated providing and initial message
+    A LogMessage Object can be instanciated providing initial Report Message, 
+    Error Message and Error Code
       
     :param string logmessage: A string Message that will be stored as 'LogMessage::report' string Attribute
     :param string errormessage: A string Message that will be stored as 'LogMessage::error' string Attribute  
@@ -89,6 +96,12 @@ class LogMessage(object):
       
       
   def setReport(self, message = ''):
+    '''
+    This Method sets by Replacement the `LogMessage.report` string 
+    
+    :param string message: The Message string thet replaces the former
+      Report Message string
+    '''
     self._arr_rpt = []
     self._report = ''
     
@@ -97,16 +110,24 @@ class LogMessage(object):
     
     
   def setError(self, message = '', code = None):
+    '''
+    This Method sets by Replacement the `LogMessage.error` string and 
+    sets and replaces the `LogMessage.code` Error Code
+    
+    :param string message: The Message string that replaces former
+      the former Error Message String
+    :param integer code: The Error Code that replaces the former
+      Error Code
+    '''
     self._arr_err = []
-    
     self._error_message = ''
-    
-    if code is not None :
-      self._error_code = code
     
     if message != '' :
       self._arr_err.append(message)
       
+    if code is not None :
+      self._error_code = code
+    
       
   def addErrorCode(self, code):
     '''
@@ -128,6 +149,10 @@ class LogMessage(object):
     
       
   def clear(self):
+    '''
+    Resets the `LogMessage.report`, `LogMessage.error` and `LogMessage.code` Property
+    It empties the Lists and resets the Output Buffer.
+    '''
     self._arr_rpt = []
     self._arr_err = []
     
