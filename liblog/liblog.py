@@ -72,17 +72,20 @@ class LogMessage(object):
   def addError(self, message, code = 0):
     '''
     Adds an Error Message and an Error Code
+    Errors are treated in an accumulative way that means that 
+    the Error Code is only overwritten by an higher Error Code
+    as described in `LogMessage.addErrorCode`
     
-    :param string message:
-    :param integer code:
+    :param string message: The Message to be added to the LogMessage.error Attribute
+    :param integer code: The Error Code to be added
+    :func:`addErrorCode`
     '''
     
     if message != '' :
       self._arr_err.append(message)
       self._error_message = ''
-      
-    if code > 0 and code > self._error_code :
-      self._error_code = code
+     
+    self.addErrorCode(code) 
       
       
   def setReport(self, message = ''):
