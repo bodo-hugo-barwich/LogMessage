@@ -1,5 +1,5 @@
 '''
-@version: 2018-10-11
+@version: 2018-10-22
 
 @author: Bodo Hugo Barwich
 '''
@@ -38,8 +38,8 @@ class LogMessage(object):
     self._arr_rpt = []
     self._arr_err = []
     
-    self._report = ''
-    self._error_message = ''
+    self._report = None
+    self._error_message = None
     
     self._error_code = 0
     
@@ -49,7 +49,7 @@ class LogMessage(object):
     if errormessage != '' :
       self.setError(errormessage, errorcode)
     elif errorcode != 0 :
-      self._error_code = errorcode
+      self.setErrorCode(errorcode)
       
   
   def __del__(self):
@@ -73,7 +73,7 @@ class LogMessage(object):
     
     if message != '' :
       self._arr_rpt.append(message)
-      self._report = ''
+      self._report = None
   
     
   def addError(self, message, code = 0):
@@ -90,7 +90,7 @@ class LogMessage(object):
     
     if message != '' :
       self._arr_err.append(message)
-      self._error_message = ''
+      self._error_message = None
      
     self.addErrorCode(code) 
       
@@ -120,7 +120,7 @@ class LogMessage(object):
       Error Code
     '''
     self._arr_err = []
-    self._error_message = ''
+    self._error_message = None
     
     if message != '' :
       self._arr_err.append(message)
@@ -156,8 +156,8 @@ class LogMessage(object):
     self._arr_rpt = []
     self._arr_err = []
     
-    self._report = ''
-    self._error_message = ''
+    self._report = None
+    self._error_message = None
     
     self._error_code = 0
     
@@ -189,7 +189,7 @@ class LogMessage(object):
     :returns: All Report Messages as single String joined each one in a new Line
     :rtype list[string]
     '''
-    if self._report == '' :
+    if self._report is None :
       self._report = '\n'.join(self._arr_rpt)
     
     return self._report
@@ -202,7 +202,7 @@ class LogMessage(object):
     :returns: All Error Messages as single String joined each one in a new Line
     :rtype string
     '''
-    if self._error_message == '' :
+    if self._error_message is None :
       self._error_message = '\n'.join(self._arr_err)
     
     return self._error_message
