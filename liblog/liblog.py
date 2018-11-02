@@ -1,8 +1,14 @@
 '''
-@version: 2018-10-22
+This Module provides the `LogMessage` Class which implements an accumulative Log 
+and Error strings management.
 
-@author: Bodo Hugo Barwich
+:version: 2018-10-22
+
+:author: Bodo Hugo Barwich
 '''
+__docformat__ = "restructuredtext en"
+
+
 from mock.mock import self
 
 
@@ -11,28 +17,40 @@ class LogMessage(object):
   '''
   This is a Class to manage accumulative Log and Error strings and the numeric Error Code
   and return them as single String
-  It offers Methods to progressively add Messages to the Log or Error Registry
-  The Error Code is accumulative since it keeps only the Highest Value.
-  It publishes the complete merged Message as Properties
-  :func:`LogMessage.report`
-  :func:`LogMessage.error`
-  :func:`LogMessage.code`
-  '''
-   
-  '''
-  -----------------------------------------------------------------------------------------
-  Constructors
-  '''
   
+  It offers Methods to progressively add Messages to the Log or Error Registry
+  
+  The Error Code is accumulative since it keeps only the Highest Value.
+  
+  It publishes the complete merged Message as Properties
+    
+  :undocumented: LogMessage._arr_rpt
+  :undocumented: LogMessage._arr_err
+  
+  :see: `LogMessage.report`
+  :see: `LogMessage.error`
+  :see: `LogMessage.code`
+  '''
+
+  #-----------------------------------------------------------------------------------------
+  #Constructors
+
       
   def __init__(self, logmessage = '', errormessage = '', errorcode = 0):
     '''
     A LogMessage Object can be instanciated providing initial Report Message, 
     Error Message and Error Code
       
-    :param string logmessage: A string Message that will be stored as 'LogMessage::report' string Attribute
-    :param string errormessage: A string Message that will be stored as 'LogMessage::error' string Attribute  
-    :param integer errormessage: A whole Number that will be stored single 'LogMessage::code' numeric Attribute  
+    :param logmessage: A string Message that will be stored as `LogMessage.report` string Property
+    :type logmessage: string
+    :param errormessage: A string Message that will be stored as `LogMessage.error` string Property
+    :type errormessage: string  
+    :param errorcode: A whole Number that will be stored single `LogMessage.code` numeric Property
+    :type errorcode: integer
+    
+    :see: `LogMessage.report`
+    :see: `LogMessage.error`
+    :see: `LogMessage.code`
     '''
     
     self._arr_rpt = []
@@ -53,22 +71,25 @@ class LogMessage(object):
       
   
   def __del__(self):
+    '''
+    On Destruction the Lists of strings will be freed
+    '''
     self._arr_log = None
     self._arr_err = None
   
   
    
-  '''
-  -----------------------------------------------------------------------------------------
-  Administration Methods
-  '''
-  
-      
+  #-----------------------------------------------------------------------------------------
+  #Administration Methods
+
+
   def addReport(self, message):
     '''
     Adds a Message to the Report String
     
-    :param string message: A String that will be added to the self.report string attribute
+    :param message: A String that will be added to the LogMessage.report string Property
+    :type message: string
+    :see: `LogMessage.report`
     '''
     
     if message != '' :
@@ -78,14 +99,16 @@ class LogMessage(object):
     
   def addError(self, message, code = 0):
     '''
-    Adds an Error Message and an Error Code
+    Adds an Error Message and an Error Code.
     Errors are treated in an accumulative way that means that 
     the Error Code is only overwritten by an higher Error Code
     as described in `LogMessage.addErrorCode`
     
-    :param string message: The Message to be added to the LogMessage.error Attribute
-    :param integer code: The Error Code to be added
-    :func:`addErrorCode`
+    :param message: The Message to be added to the `LogMessage.error` Property
+    :type message: string
+    :param code: The Error Code to be added
+    :type code: integer
+    :see: `LogMessage.addErrorCode`
     '''
     
     if message != '' :
@@ -99,8 +122,9 @@ class LogMessage(object):
     '''
     This Method sets by Replacement the `LogMessage.report` string 
     
-    :param string message: The Message string thet replaces the former
+    :param message: The Message string thet replaces the former\
       Report Message string
+    :type message: string
     '''
     self._arr_rpt = []
     self._report = ''
@@ -114,10 +138,12 @@ class LogMessage(object):
     This Method sets by Replacement the `LogMessage.error` string and 
     sets and replaces the `LogMessage.code` Error Code
     
-    :param string message: The Message string that replaces former
+    :param message: The Message string that replaces former
       the former Error Message String
-    :param integer code: The Error Code that replaces the former
+    :type message: string
+    :param code: The Error Code that replaces the former
       Error Code
+    :type code: integer
     '''
     self._arr_err = []
     self._error_message = None
@@ -133,7 +159,8 @@ class LogMessage(object):
     '''
     This will keep the Highest added Error Code in the Attribute LogMessage.code
     
-    :param integer code: The Error Code to be added
+    :param code: The Error Code to be added
+    :type code: integer 
     '''
     if code > self._error_code :
       self._error_code = code
@@ -143,7 +170,8 @@ class LogMessage(object):
     '''
     This will overwrite the existing Error Code with the new Error Code
     
-    :param integer code: The Error Code to overwrite the existing one
+    :param code: The Error Code to overwrite the existing one
+    :type code: integer
     '''
     self._error_code = code
     
@@ -164,30 +192,33 @@ class LogMessage(object):
   
   
   
-  '''
-  -----------------------------------------------------------------------------------------
-  Consultation Methods
-  '''
+  
+  #-----------------------------------------------------------------------------------------
+  #Consultation Methods
 
   
   def getReportArray(self):
+    '''
+    :returns: The Report Messages as List of Strings
+    :rtype: list[string]
+    '''
     return self._arr_rpt
   
   
   def getErrorArray(self):
     '''
     :returns: The Error Messages as List of Strings
-    :rtype list[string]
+    :rtype: list[string]
     '''
     return self._arr_err
     
       
   def getReportString(self):
     '''
-    LogMessage.report Attribute which represents All Report Messages 
+    LogMessage.report Property which represents All Report Messages 
      
-    :returns: All Report Messages as single String joined each one in a new Line
-    :rtype list[string]
+    :returns: All Report Messages as single String joined each Message in a new Line
+    :rtype: string
     '''
     if self._report is None :
       self._report = '\n'.join(self._arr_rpt)
@@ -197,10 +228,10 @@ class LogMessage(object):
   
   def getErrorString(self):
     '''
-    LogMessage.error Attribute which represents All Error Messages
+    LogMessage.error Property which represents All Error Messages
     
-    :returns: All Error Messages as single String joined each one in a new Line
-    :rtype string
+    :returns: All Error Messages as single String joined each Massage in a new Line
+    :rtype: string
     '''
     if self._error_message is None :
       self._error_message = '\n'.join(self._arr_err)
