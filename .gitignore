@@ -1,0 +1,7 @@
+#Project Files
+.project
+.pydevproject
+
+#Documentation
+doc*
+doc*/**
